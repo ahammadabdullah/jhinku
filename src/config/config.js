@@ -6,6 +6,8 @@ export const config = {
   spotify: {
     clientId: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    redirectUri: process.env.SPOTIFY_REDIRECT_URI
+    redirectUri: process.env.NODE_ENV === 'production' 
+      ? `${process.env.RAILWAY_PUBLIC_DOMAIN}/callback`
+      : process.env.SPOTIFY_REDIRECT_URI
   }
 };

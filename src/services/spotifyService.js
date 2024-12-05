@@ -18,6 +18,7 @@ class SpotifyService {
       console.log('Spotify API authenticated successfully');
     } catch (error) {
       console.error('Failed to authenticate with Spotify:', error);
+      console.error('Current redirect URI:', config.spotify.redirectUri);
       throw new Error('Spotify authentication failed');
     }
   }
@@ -41,6 +42,26 @@ class SpotifyService {
     }
   }
 
+  async refreshTokenIfNeeded(userId) {
+    const userToken = this.userTokens.get(userId);
+    if (!userToken) return false;
+
+    try {
+      this.spotifyApi.setRefreshToken(userToken.refreshToken);
+      const data = await this.spotifyApi.refreshAccessToken();
+      const tokens = {
+        accessToken: data.body['access_token'],
+        refreshToken: userToken.refreshToken,
+        expiresIn: data.body['expires_in']
+      };
+      this.setUserTokens(userId, tokens);
+      return true;
+    } catch (error) {
+      console.error('Error refreshing token:', error);
+      return false;
+    }
+  }
+
   async getCurrentTrack(userId) {
     try {
       const userToken = this.userTokens.get(userId);
@@ -48,6 +69,7 @@ class SpotifyService {
         return { error: 'not_authenticated', message: 'Please authenticate with Spotify first' };
       }
 
+      await this.refreshTokenIfNeeded(userId);
       this.spotifyApi.setAccessToken(userToken.accessToken);
       const data = await this.spotifyApi.getMyCurrentPlayingTrack();
       
