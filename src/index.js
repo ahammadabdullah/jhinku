@@ -2,6 +2,8 @@ import 'dotenv/config';
 import express from 'express';
 import { discordService } from './services/discordService.js';
 import { spotifyService } from './services/spotifyService.js';
+import { termsAndConditions } from './pages/termsAndConditions.js';
+import { privacyPolicy } from './pages/privaryPolicy.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,6 +22,12 @@ app.get('/callback', async (req, res) => {
     console.error('Callback error:', error);
     res.status(500).send('Authentication failed. Please try again.');
   }
+});
+app.get('/terms', (req, res) => {
+  res.send(termsAndConditions);
+});
+app.get('/privacy', (req, res) => {
+  res.send(privacyPolicy);
 });
 
 async function startBot() {
