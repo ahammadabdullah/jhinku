@@ -7,7 +7,7 @@ export const config = {
     clientId: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
     redirectUri: process.env.NODE_ENV === 'production' 
-      ? `${process.env.RAILWAY_PUBLIC_DOMAIN}/callback`
-      : process.env.SPOTIFY_REDIRECT_URI
+      ? `https://jhinku-production.up.railway.app/callback`
+      : `https://jhinku-production.up.railway.app/callback`
   }
 };
