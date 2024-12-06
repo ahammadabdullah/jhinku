@@ -32,21 +32,17 @@ class DiscordService {
           const track = await spotifyService.getCurrentTrack(message.author.id);
           
           if (track.error === 'not_authenticated') {
-            // Send authentication request via DM
             try {
               const authUrl = spotifyService.getAuthURL(message.author.id);
               const authEmbed = new EmbedBuilder()
                 .setColor('#1DB954')
                 .setTitle('Spotify Authentication Required')
                 .setDescription('Please click the link below to authenticate with Spotify:')
-                .addFields(
-                  { name: 'Authentication Link', value: authUrl }
-                )
-                .setFooter({ text: 'After authenticating, you can use !playing in any channel' });
+                .addFields({ name: 'Authentication Link', value: `[Click here](${authUrl})` })
+                .setFooter({ text: 'After authenticating, you can use /jhinku in any channel!' });
 
               await message.author.send({ embeds: [authEmbed] });
               
-              // Send a response in the channel where command was used
               if (message.guild) {
                 await message.reply('I\'ve sent you a DM with authentication instructions! Please check your DMs.');
               }
