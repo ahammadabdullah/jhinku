@@ -27,7 +27,7 @@ class DiscordService {
     this.client.on('messageCreate', async (message) => {
       if (message.author.bot) return;
 
-      if (message.content === '!playing') {
+      if (message.content === '!jhinku') {
         try {
           const track = await spotifyService.getCurrentTrack(message.author.id);
           
@@ -87,7 +87,7 @@ class DiscordService {
             .setColor('#1DB954')
             .setTitle('Bot Commands')
             .addFields(
-              { name: '!playing', value: 'Shows your currently playing Spotify track' },
+              { name: '!jhinku', value: 'Shows your currently playing Spotify track' },
               { name: '!help', value: 'Shows this help message' }
             );
           
